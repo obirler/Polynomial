@@ -398,6 +398,28 @@ namespace Polynomial
                 {
                     polymax = poly.Minimum(poly.StartPoint, poly.EndPoint, 15);
                     if (polymax < result)
+                }
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Returns the piecewise polynomial in a format that can be used by the FunctionCalculator class.
+        /// </summary>
+        /// <returns>A list of tuples, where each tuple represents a polynomial in the piecewise polynomial and its corresponding interval. The polynomial is represented as a list of tuples, where each tuple represents a term in the polynomial. The interval is represented as a tuple of two elements: the start point and the end point.</returns>
+        public List<Tuple<List<Tuple<double, double>>, Tuple<double, double>>> GetPiecewisePolynomial()
+        {
+            List<Tuple<List<Tuple<double, double>>, Tuple<double, double>>> piecewisePolynomial = new List<Tuple<List<Tuple<double, double>>, Tuple<double, double>>>();
+
+            foreach (Poly poly in List)
+            {
+                List<Tuple<double, double>> polynomial = poly.GetPolynomial();
+                Tuple<double, double> interval = new Tuple<double, double>(poly.StartPoint, poly.EndPoint);
+                piecewisePolynomial.Add(new Tuple<List<Tuple<double, double>>, Tuple<double, double>>(polynomial, interval));
+            }
+
+            return piecewisePolynomial;
+        }
                     {
                         result = polymax;
                     }
@@ -504,6 +526,22 @@ namespace Polynomial
             {
                 return p1;
             }
+        }
+
+        public List<Tuple<List<Tuple<double, double>>, Tuple<double, double>>> GetPiecewisePolynomial()
+        {
+            List<Tuple<List<Tuple<double, double>>, Tuple<double, double>>> piecewisePolynomial = new List<Tuple<List<Tuple<double, double>>, Tuple<double, double>>>();
+
+            foreach (Poly poly in List)
+            {
+                List<Tuple<double, double>> polynomial = poly.GetPolynomial();
+                Tuple<double, double> interval = new Tuple<double, double>(poly.StartPoint, poly.EndPoint);
+
+                piecewisePolynomial.Add(new Tuple<List<Tuple<double, double>>, Tuple<double, double>>(polynomial, interval));
+            }
+
+            return piecewisePolynomial;
+        }
 
             foreach (Poly poly1 in p1)
             {
