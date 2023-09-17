@@ -398,6 +398,21 @@ namespace Polynomial
 
             for (double i = _startpoint; System.Math.Round(i - _endpoint, 10) <= 0; i = i + diff)
             {
+            }
+
+        /// <summary>
+        /// Returns the polynomial in a format that can be used by the FunctionCalculator class.
+        /// </summary>
+        /// <returns>A list of tuples, where each tuple represents a term in the polynomial. The first element of the tuple is the coefficient of the term, and the second element is the power of the term.</returns>
+        public List<Tuple<double, double>> GetPolynomial()
+        {
+            List<Tuple<double, double>> polynomial = new List<Tuple<double, double>>();
+            foreach (Term t in this.Terms)
+            {
+                polynomial.Add(new Tuple<double, double>(t.Coefficient, t.Power));
+            }
+            return polynomial;
+        }
                 value = Calculate(i);
                 if (value < min)
                 {
