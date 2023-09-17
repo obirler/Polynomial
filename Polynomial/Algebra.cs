@@ -24,8 +24,9 @@ namespace Polynomial
     /// <summary>
     /// 
     /// </summary>
-    public static class Algebra
+    public class Algebra
     {
+        public Algebra() { }
         /// <summary>
         /// Solves the linear equation system using Gauss Elimination Method like
         /// Ax + By = C
