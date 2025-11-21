@@ -39,49 +39,31 @@ namespace Polynomial
         #region Custom Methods:
 
         /// <summary>
-        /// Sor Method: Sort Items of Collection in ASC or DESC Order.
+        /// Sort Method: Sort Items of Collection in ASC or DESC Order.
+        /// Improved to use LINQ for better performance and readability.
         /// </summary>
         /// <param name="Order">SortOrder values : ASC or DESC</param>
         public void Sort(SortType Order)
         {
-            TermCollection result = new TermCollection();
+            var terms = new System.Collections.Generic.List<Term>();
+            foreach (Term t in List)
+            {
+                terms.Add(t);
+            }
+
             if (Order == SortType.ASC)
             {
-                while (this.Length > 0)
-                {
-                    Term MinTerm = this[0];
-                    foreach (Term t in List)
-                    {
-                        if (t.Power < MinTerm.Power)
-                        {
-                            MinTerm = t;
-                        }
-                    }
-                    result.Add(MinTerm);
-                    this.Remove(MinTerm);
-                }
+                terms.Sort((a, b) => a.Power.CompareTo(b.Power));
             }
             else
             {
-                while (this.Length > 0)
-                {
-                    Term MaxTerm = this[0];
-                    foreach (Term t in List)
-                    {
-                        if (t.Power > MaxTerm.Power)
-                        {
-                            MaxTerm = t;
-                        }
-                    }
-                    result.Add(MaxTerm);
-                    this.Remove(MaxTerm);
-                }
+                terms.Sort((a, b) => b.Power.CompareTo(a.Power));
             }
 
             this.Clear();
-            foreach (Term t in result)
+            foreach (Term t in terms)
             {
-                this.Add(t);
+                List.Add(t);
             }
         }
 

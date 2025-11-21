@@ -40,48 +40,30 @@ namespace Polynomial
 
         /// <summary>
         /// Sorts Items of Collection in ASC or DESC Order.
+        /// Improved to use sorting with lambda for better performance.
         /// </summary>
         /// <param name="Order">Sort Order values : ASC or DESC</param>
         public void Sort(SortType Order)
         {
-            var result = new ConjugateTermCollection();
+            var terms = new System.Collections.Generic.List<ConjugateTerm>();
+            foreach (ConjugateTerm t in List)
+            {
+                terms.Add(t);
+            }
+
             if (Order == SortType.ASC)
             {
-                while (this.Length > 0)
-                {
-                    ConjugateTerm MinTerm = this[0];
-                    foreach (ConjugateTerm t in List)
-                    {
-                        if (t.Power < MinTerm.Power)
-                        {
-                            MinTerm = t;
-                        }
-                    }
-                    result.Add(MinTerm);
-                    this.Remove(MinTerm);
-                }
+                terms.Sort((a, b) => a.Power.CompareTo(b.Power));
             }
             else
             {
-                while (this.Length > 0)
-                {
-                    ConjugateTerm MaxTerm = this[0];
-                    foreach (ConjugateTerm t in List)
-                    {
-                        if (t.Power > MaxTerm.Power)
-                        {
-                            MaxTerm = t;
-                        }
-                    }
-                    result.Add(MaxTerm);
-                    this.Remove(MaxTerm);
-                }
+                terms.Sort((a, b) => b.Power.CompareTo(a.Power));
             }
 
             this.Clear();
-            foreach (ConjugateTerm t in result)
+            foreach (ConjugateTerm t in terms)
             {
-                this.Add(t);
+                List.Add(t);
             }
         }
 

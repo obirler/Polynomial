@@ -51,7 +51,9 @@
     <Compile Include="Interfaces\ITerm.cs" />
     <Compile Include="Operations\DifferentiationOperation.cs" />
     <Compile Include="Operations\IntegrationOperation.cs" />
+    <Compile Include="Operations\NumericalOperationBase.cs" />
     <Compile Include="Operations\PolynomialConstants.cs" />
+    <Compile Include="Operations\RootFinder.cs" />
     <Compile Include="Parsers\PolynomialParser.cs" />
     <Compile Include="PiecewiseConjugatePoly.cs" />
     <Compile Include="PiecewisePoly.cs" />
