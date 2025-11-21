@@ -1,0 +1,331 @@
+/*
+========================================================================
+    Copyright (C) 2025 Omer Birler.
+    
+    This file is part of polynomial project.
+    Polynomial is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Polynomial is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Polynomial.  If not, see <http://www.gnu.org/licenses/>.
+========================================================================
+*/
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Polynomial;
+
+namespace Polynomial.Tests
+{
+    [TestClass]
+    public class PolyTests
+    {
+        [TestMethod]
+        public void Constructor_WithStringExpression_CreatesValidPolynomial()
+        {
+            // Arrange & Act
+            var poly = new Poly("3x^2 + 2x - 1");
+
+            // Assert
+            Assert.IsNotNull(poly);
+            Assert.IsNotNull(poly.Terms);
+            Assert.AreEqual(3, poly.Terms.Count);
+        }
+
+        [TestMethod]
+        public void Constructor_WithStartAndEndPoints_SetsRangeCorrectly()
+        {
+            // Arrange & Act
+            var poly = new Poly("x^2", 0, 10);
+
+            // Assert
+            Assert.AreEqual(0, poly.StartPoint);
+            Assert.AreEqual(10, poly.EndPoint);
+        }
+
+        [TestMethod]
+        public void Calculate_WithSimplePolynomial_ReturnsCorrectValue()
+        {
+            // Arrange
+            var poly = new Poly("x^2 + 2x + 1");
+
+            // Act
+            double result = poly.Calculate(3);
+
+            // Assert
+            // 3^2 + 2*3 + 1 = 9 + 6 + 1 = 16
+            Assert.AreEqual(16, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void Calculate_WithNegativeCoefficients_ReturnsCorrectValue()
+        {
+            // Arrange
+            var poly = new Poly("2x^2 - 3x + 1");
+
+            // Act
+            double result = poly.Calculate(2);
+
+            // Assert
+            // 2*4 - 3*2 + 1 = 8 - 6 + 1 = 3
+            Assert.AreEqual(3, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void Integrate_SimplePolynomial_ReturnsCorrectIntegral()
+        {
+            // Arrange
+            var poly = new Poly("x^2");
+
+            // Act
+            var integrated = poly.Integrate();
+
+            // Assert
+            // Integral of x^2 is (1/3)x^3
+            Assert.IsNotNull(integrated);
+            var result = integrated.Calculate(3);
+            // (1/3) * 27 = 9
+            Assert.AreEqual(9, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void Derivate_SimplePolynomial_ReturnsCorrectDerivative()
+        {
+            // Arrange
+            var poly = new Poly("x^3 + 2x^2 + 3x");
+
+            // Act
+            var derivative = poly.Derivate();
+
+            // Assert
+            // Derivative of x^3 + 2x^2 + 3x is 3x^2 + 4x + 3
+            var result = derivative.Calculate(2);
+            // 3*4 + 4*2 + 3 = 12 + 8 + 3 = 23
+            Assert.AreEqual(23, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void DefiniteIntegral_WithRange_ReturnsCorrectValue()
+        {
+            // Arrange
+            var poly = new Poly("x");
+
+            // Act
+            double result = poly.DefiniteIntegral(0, 2);
+
+            // Assert
+            // Integral of x from 0 to 2 is (1/2)*x^2 = (1/2)*4 - 0 = 2
+            Assert.AreEqual(2, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void Addition_TwoPolynomials_ReturnsCorrectSum()
+        {
+            // Arrange
+            var poly1 = new Poly("x^2 + 2x");
+            var poly2 = new Poly("3x^2 - x + 1");
+
+            // Act
+            var sum = poly1 + poly2;
+
+            // Assert
+            var result = sum.Calculate(2);
+            // (4 + 4) + (12 - 2 + 1) = 8 + 11 = 19
+            Assert.AreEqual(19, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void Subtraction_TwoPolynomials_ReturnsCorrectDifference()
+        {
+            // Arrange
+            var poly1 = new Poly("5x^2 + 3x");
+            var poly2 = new Poly("2x^2 + x");
+
+            // Act
+            var diff = poly1 - poly2;
+
+            // Assert
+            var result = diff.Calculate(2);
+            // (20 + 6) - (8 + 2) = 26 - 10 = 16
+            Assert.AreEqual(16, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void Multiplication_TwoPolynomials_ReturnsCorrectProduct()
+        {
+            // Arrange
+            var poly1 = new Poly("x + 1");
+            var poly2 = new Poly("x - 1");
+
+            // Act
+            var product = poly1 * poly2;
+
+            // Assert
+            var result = product.Calculate(3);
+            // (x+1)(x-1) = x^2 - 1, at x=3: 9 - 1 = 8
+            Assert.AreEqual(8, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void MultiplicationByScalar_ReturnsCorrectProduct()
+        {
+            // Arrange
+            var poly = new Poly("x^2 + 2x");
+
+            // Act
+            var result = poly * 3.0;
+
+            // Assert
+            var value = result.Calculate(2);
+            // 3*(4 + 4) = 24
+            Assert.AreEqual(24, value, 0.0001);
+        }
+
+        [TestMethod]
+        public void Degree_ReturnsHighestPower()
+        {
+            // Arrange
+            var poly = new Poly("5x^4 + 3x^2 + 2");
+
+            // Act
+            double degree = poly.Degree();
+
+            // Assert
+            Assert.AreEqual(4, degree);
+        }
+
+        [TestMethod]
+        public void IsConstant_WithConstantPolynomial_ReturnsTrue()
+        {
+            // Arrange
+            var poly = new Poly("5");
+
+            // Act
+            bool isConstant = poly.IsConstant();
+
+            // Assert
+            Assert.IsTrue(isConstant);
+        }
+
+        [TestMethod]
+        public void IsConstant_WithNonConstantPolynomial_ReturnsFalse()
+        {
+            // Arrange
+            var poly = new Poly("x + 5");
+
+            // Act
+            bool isConstant = poly.IsConstant();
+
+            // Assert
+            Assert.IsFalse(isConstant);
+        }
+
+        [TestMethod]
+        public void IsLinear_WithLinearPolynomial_ReturnsTrue()
+        {
+            // Arrange
+            var poly = new Poly("2x + 3");
+
+            // Act
+            bool isLinear = poly.IsLinear();
+
+            // Assert
+            Assert.IsTrue(isLinear);
+        }
+
+        [TestMethod]
+        public void IsLinear_WithQuadraticPolynomial_ReturnsFalse()
+        {
+            // Arrange
+            var poly = new Poly("x^2 + 2x");
+
+            // Act
+            bool isLinear = poly.IsLinear();
+
+            // Assert
+            Assert.IsFalse(isLinear);
+        }
+
+        [TestMethod]
+        public void ToString_ReturnsCorrectStringRepresentation()
+        {
+            // Arrange
+            var poly = new Poly("3x^2 + 2x - 1");
+
+            // Act
+            string result = poly.ToString();
+
+            // Assert
+            Assert.IsTrue(result.Contains("x^2"));
+            Assert.IsTrue(result.Contains("x"));
+        }
+
+        [TestMethod]
+        public void ValidateExpression_WithValidExpression_ReturnsTrue()
+        {
+            // Act
+            bool isValid = Poly.ValidateExpression("3x^2 + 2x - 1");
+
+            // Assert
+            Assert.IsTrue(isValid);
+        }
+
+        [TestMethod]
+        public void ValidateExpression_WithInvalidExpression_ReturnsFalse()
+        {
+            // Act
+            bool isValid = Poly.ValidateExpression("3x^2 + invalid");
+
+            // Assert
+            Assert.IsFalse(isValid);
+        }
+
+        [TestMethod]
+        public void Square_ReturnsPolynomialSquared()
+        {
+            // Arrange
+            var poly = new Poly("x + 1");
+
+            // Act
+            var squared = poly.Square();
+
+            // Assert
+            var result = squared.Calculate(2);
+            // (2 + 1)^2 = 9
+            Assert.AreEqual(9, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void Cube_ReturnsPolynomialCubed()
+        {
+            // Arrange
+            var poly = new Poly("x + 1");
+
+            // Act
+            var cubed = poly.Cube();
+
+            // Assert
+            var result = cubed.Calculate(2);
+            // (2 + 1)^3 = 27
+            Assert.AreEqual(27, result, 0.0001);
+        }
+
+        [TestMethod]
+        public void Parse_UpdatesPolynomialWithNewExpression()
+        {
+            // Arrange
+            var poly = new Poly("x");
+
+            // Act
+            poly.Parse("x^2 + 1");
+            var result = poly.Calculate(2);
+
+            // Assert
+            Assert.AreEqual(5, result, 0.0001); // 4 + 1 = 5
+        }
+    }
+}
