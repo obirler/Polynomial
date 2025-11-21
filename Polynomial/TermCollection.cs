@@ -1,18 +1,18 @@
 ﻿/*
 ========================================================================
-    Copyright (C) 2022 Omer Birler.
+    Copyright (C) 2025 Omer Birler.
     
     This file is part of polynomial project.
-    Mesnet is free software: you can redistribute it and/or modify
+    Polynomial is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    Mesnet is distributed in the hope that it will be useful,
+    Polynomial is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with Mesnet.  If not, see <http://www.gnu.org/licenses/>.
+    along with Polynomial.  If not, see <http://www.gnu.org/licenses/>.
 ========================================================================
 */
 
@@ -39,49 +39,31 @@ namespace Polynomial
         #region Custom Methods:
 
         /// <summary>
-        /// Sor Method: Sort Items of Collection in ASC or DESC Order.
+        /// Sort Method: Sort Items of Collection in ASC or DESC Order.
+        /// Improved to use LINQ for better performance and readability.
         /// </summary>
         /// <param name="Order">SortOrder values : ASC or DESC</param>
         public void Sort(SortType Order)
         {
-            TermCollection result = new TermCollection();
+            var terms = new System.Collections.Generic.List<Term>();
+            foreach (Term t in List)
+            {
+                terms.Add(t);
+            }
+
             if (Order == SortType.ASC)
             {
-                while (this.Length > 0)
-                {
-                    Term MinTerm = this[0];
-                    foreach (Term t in List)
-                    {
-                        if (t.Power < MinTerm.Power)
-                        {
-                            MinTerm = t;
-                        }
-                    }
-                    result.Add(MinTerm);
-                    this.Remove(MinTerm);
-                }
+                terms.Sort((a, b) => a.Power.CompareTo(b.Power));
             }
             else
             {
-                while (this.Length > 0)
-                {
-                    Term MaxTerm = this[0];
-                    foreach (Term t in List)
-                    {
-                        if (t.Power > MaxTerm.Power)
-                        {
-                            MaxTerm = t;
-                        }
-                    }
-                    result.Add(MaxTerm);
-                    this.Remove(MaxTerm);
-                }
+                terms.Sort((a, b) => b.Power.CompareTo(a.Power));
             }
 
             this.Clear();
-            foreach (Term t in result)
+            foreach (Term t in terms)
             {
-                this.Add(t);
+                List.Add(t);
             }
         }
 

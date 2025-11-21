@@ -1,18 +1,18 @@
 ﻿/*
 ========================================================================
-    Copyright (C) 2022 Omer Birler.
+    Copyright (C) 2025 Omer Birler.
     
     This file is part of polynomial.
-    Mesnet is free software: you can redistribute it and/or modify
+    Polynomial is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    Mesnet is distributed in the hope that it will be useful,
+    Polynomial is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with Mesnet.  If not, see <http://www.gnu.org/licenses/>.
+    along with Polynomial.  If not, see <http://www.gnu.org/licenses/>.
 ========================================================================
 */
 
@@ -40,48 +40,30 @@ namespace Polynomial
 
         /// <summary>
         /// Sorts Items of Collection in ASC or DESC Order.
+        /// Improved to use sorting with lambda for better performance.
         /// </summary>
         /// <param name="Order">Sort Order values : ASC or DESC</param>
         public void Sort(SortType Order)
         {
-            var result = new ConjugateTermCollection();
+            var terms = new System.Collections.Generic.List<ConjugateTerm>();
+            foreach (ConjugateTerm t in List)
+            {
+                terms.Add(t);
+            }
+
             if (Order == SortType.ASC)
             {
-                while (this.Length > 0)
-                {
-                    ConjugateTerm MinTerm = this[0];
-                    foreach (ConjugateTerm t in List)
-                    {
-                        if (t.Power < MinTerm.Power)
-                        {
-                            MinTerm = t;
-                        }
-                    }
-                    result.Add(MinTerm);
-                    this.Remove(MinTerm);
-                }
+                terms.Sort((a, b) => a.Power.CompareTo(b.Power));
             }
             else
             {
-                while (this.Length > 0)
-                {
-                    ConjugateTerm MaxTerm = this[0];
-                    foreach (ConjugateTerm t in List)
-                    {
-                        if (t.Power > MaxTerm.Power)
-                        {
-                            MaxTerm = t;
-                        }
-                    }
-                    result.Add(MaxTerm);
-                    this.Remove(MaxTerm);
-                }
+                terms.Sort((a, b) => b.Power.CompareTo(a.Power));
             }
 
             this.Clear();
-            foreach (ConjugateTerm t in result)
+            foreach (ConjugateTerm t in terms)
             {
-                this.Add(t);
+                List.Add(t);
             }
         }
 

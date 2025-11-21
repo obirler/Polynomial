@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MSTest" Version="4.0.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Include source files directly since .NET Framework 4.8 isn't available in CI -->
+    <Compile Include="..\Polynomial\*.cs" Link="Polynomial\%(Filename)%(Extension)" />
+    <Compile Include="..\Polynomial\Interfaces\*.cs" Link="Polynomial\Interfaces\%(Filename)%(Extension)" />
+    <Compile Include="..\Polynomial\Operations\*.cs" Link="Polynomial\Operations\%(Filename)%(Extension)" />
+    <Compile Include="..\Polynomial\Parsers\*.cs" Link="Polynomial\Parsers\%(Filename)%(Extension)" />
+    <Compile Include="..\Polynomial\Factories\*.cs" Link="Polynomial\Factories\%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>
