@@ -69,16 +69,8 @@ namespace Polynomial
 
         #endregion
 
-        #region Destructor:
-        /// <summary>
-        /// Clear the Term Collections
-        /// </summary>
-        ~ConjugatePoly()
-        {
-            this.Terms.Clear();
-        }
-
-        #endregion 
+        // Destructor removed - C# garbage collector handles cleanup automatically
+        // Keeping finalizers can harm performance and is unnecessary for managed resources 
 
         #region Override methods:
 

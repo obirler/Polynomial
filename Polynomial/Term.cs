@@ -17,11 +17,16 @@
 */
 using System.Globalization;
 using System.Threading;
+using Polynomial.Interfaces;
 
 using OrgMath = System.Math;
 namespace Polynomial
 {
-    public class Term
+    /// <summary>
+    /// Represents a single term in a polynomial expression.
+    /// Implements ITerm interface for better abstraction.
+    /// </summary>
+    public class Term : ITerm
     {
         #region Constructors:
 

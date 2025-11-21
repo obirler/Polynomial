@@ -20,36 +20,42 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Polynomial.Interfaces;
+using Polynomial.Parsers;
+using Polynomial.Operations;
 
 namespace Polynomial
 {
     /// <summary>
-    /// 
+    /// Represents a polynomial with support for various mathematical operations.
+    /// Implements IPolynomial interface for better abstraction and testability.
     /// </summary>
-    public class Poly
+    public class Poly : IPolynomial
     {
         #region Constructor Overloading:
         /// <summary>
         /// Constructor which Read String and find Terms in it. Create new Term for each
-        /// Term String and add it to the Terms Collection. 
+        /// Term String and add it to the Terms Collection.
+        /// Uses PolynomialParser for separation of concerns.
         /// </summary>
         /// <param name="PolyExpression"></param>
         public Poly(string PolyExpression)
         {
-            this._Terms = new TermCollection();
-            this.ReadPolyExpression(PolyExpression);
+            var parser = new PolynomialParser();
+            this._Terms = parser.Parse(PolyExpression);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Poly"/> class from a string expression and between start point and endpoint.
+        /// Uses PolynomialParser for separation of concerns.
         /// </summary>
         /// <param name="PolyExpression">The poly expression string.</param>
         /// <param name="startpoint">The startpoint of the polynomial.</param>
         /// <param name="endpoint">The endpoint point of the poynomial.</param>
         public Poly(string PolyExpression, double startpoint, double endpoint)
         {
-            this._Terms = new TermCollection();
-            this.ReadPolyExpression(PolyExpression);
+            var parser = new PolynomialParser();
+            this._Terms = parser.Parse(PolyExpression);
             _startpoint = startpoint;
             _endpoint = endpoint;
         }
@@ -87,19 +93,8 @@ namespace Polynomial
         }
         #endregion
 
-        #region Destructor:
-        /// <summary>
-        /// Clear the Term Collections
-        /// </summary>
-        ~Poly()
-        {
-            if (Terms != null)
-            {
-                Terms.Clear();
-            }
-        }
-
-        #endregion 
+        // Destructor removed - C# garbage collector handles cleanup automatically
+        // Keeping finalizers can harm performance and is unnecessary for managed resources 
 
         #region Override methods:
 
@@ -171,8 +166,8 @@ namespace Polynomial
 
         public void Parse(string PolyExpression)
         {
-            this._Terms = new TermCollection();
-            this.ReadPolyExpression(PolyExpression);
+            var parser = new PolynomialParser();
+            this._Terms = parser.Parse(PolyExpression);
         }
 
         /// <summary>
@@ -256,7 +251,7 @@ namespace Polynomial
             return Maximum(_startpoint, _endpoint);
         }
 
-        public double MaximumAbs(double initialstep, double endstep, int digit = 4)
+        public double MaximumAbs(double initialstep, double endstep, int digit = PolynomialConstants.DefaultDigits)
         {
             if (digit < 0)
             {
@@ -306,10 +301,10 @@ namespace Polynomial
 
         public double MaximumAbs()
         {
-            return MaximumAbs(200.0, 100.0, 4);
+            return MaximumAbs(PolynomialConstants.DefaultInitialStep, PolynomialConstants.DefaultEndStep, PolynomialConstants.DefaultDigits);
         }
 
-        public double MaxLocation(double startpoint, double endpoint, int digit = 4)
+        public double MaxLocation(double startpoint, double endpoint, int digit = PolynomialConstants.DefaultDigits)
         {
             if (digit < 0)
             {
@@ -369,7 +364,7 @@ namespace Polynomial
             return System.Math.Round(maxindex, digit);
         }
 
-        public double MaxLocation(int digit = 4)
+        public double MaxLocation(int digit = PolynomialConstants.DefaultDigits)
         {
             return MaxLocation(_startpoint, _endpoint, digit);
         }
@@ -381,7 +376,7 @@ namespace Polynomial
         /// <param name="endpoint">The endpoint of x for minimum scan.</param>
         /// <param name="digit">The desired number of decimals to round.</param>
         /// <returns></returns>
-        public double Minimum(double startpoint, double endpoint, int digit = 4)
+        public double Minimum(double startpoint, double endpoint, int digit = PolynomialConstants.DefaultDigits)
         {
             if (digit < 0)
             {
@@ -444,7 +439,7 @@ namespace Polynomial
             return Minimum(_startpoint, _endpoint);
         }
 
-        public double MinLocation(double startpoint, double endpoint, int digit = 4)
+        public double MinLocation(double startpoint, double endpoint, int digit = PolynomialConstants.DefaultDigits)
         {
             if (digit < 0)
             {
@@ -493,139 +488,40 @@ namespace Polynomial
             return System.Math.Round(minindex, digit);
         }
 
-        public double MinLocation(int digit = 4)
+        public double MinLocation(int digit = PolynomialConstants.DefaultDigits)
         {
             return MinLocation(_startpoint, _endpoint, digit);
         }
 
         /// <summary>
-        /// Static method which Validate the input Expression
+        /// Static method which Validate the input Expression.
+        /// Delegates to PolynomialParser for consistency.
         /// </summary>
         /// <param name="Expression"></param>
         /// <returns></returns>
         public static bool ValidateExpression(string Expression)
         {
-            if (Expression.Length == 0)
-                return false;
-
-            Expression = Expression.Trim();
-            Expression = Expression.Replace(" ", "");
-            while (Expression.IndexOf("--") > -1 | Expression.IndexOf("++") > -1 | Expression.IndexOf("^^") > -1 | Expression.IndexOf("xx") > -1)
-            {
-                Expression = Expression.Replace("--", "-");
-                Expression = Expression.Replace("++", "+");
-                Expression = Expression.Replace("^^", "^");
-                Expression = Expression.Replace("xx", "x");
-            }
-            string ValidChars = "+-x1234567890^.E";
-            bool result = true;
-            foreach (char c in Expression)
-            {
-                if (ValidChars.IndexOf(c) == -1)
-                {
-                    result = false;
-                }
-            }
-            return result;
+            var parser = new PolynomialParser();
+            return parser.Validate(Expression);
         }
 
         /// <summary>
         /// Read Method will Identify any Term in the Expression and Create a new Instance of 
-        /// Term Class and add it to the TermCollection
+        /// Term Class and add it to the TermCollection.
+        /// Deprecated: Use PolynomialParser directly for better separation of concerns.
         /// </summary>
         /// <param name="PolyExpression">input string of Polynomial Expression</param>
+        [Obsolete("This method is deprecated. Use PolynomialParser for parsing operations.")]
         private void ReadPolyExpression(string PolyExpression)
         {
-            if (ValidateExpression(PolyExpression))
-            {
-                PolyExpression = PolyExpression.Replace(" ", "");
-                string NextChar = string.Empty;
-                string NextTerm = string.Empty;
-                bool epow = false;
-                for (int i = 0; i < PolyExpression.Length; i++)
-                {
-                    NextChar = PolyExpression.Substring(i, 1);
-                    if (NextChar == "E")
-                    {
-                        epow = true;
-                    }
-
-                    if ((NextChar == "-" | NextChar == "+") & i > 0)
-                    {
-                        if (epow)
-                        {
-                            epow = false;
-                        }
-                        else
-                        {
-                            handleterm(NextTerm);
-                            NextTerm = string.Empty;
-                        }
-                    }
-                    NextTerm += NextChar;
-                }
-                handleterm(NextTerm);
-
-                this.Terms.Sort(TermCollection.SortType.ASC);
-            }
-            else
-            {
-                Debug.WriteLine("Invalid Polynomial Expression : " + PolyExpression);
-                throw new Exception("Invalid Polynomial Expression");
-            }
-        }
-
-        private void handleterm(string term)
-        {
-            Term termitem;
-            if (term.Contains("E"))
-            {
-                var coeffs = term.Split('E');
-                double c = Convert.ToDouble(coeffs[0]);
-                if (coeffs[1].Contains("x^"))
-                {
-                    var epxs = coeffs[1].Split(new string[] { "x^" }, StringSplitOptions.None);
-                    double p1 = Convert.ToDouble(epxs[0]);
-                    double p2 = Convert.ToDouble(epxs[1]);
-                    termitem = new Term();
-                    termitem.Coefficient = c * System.Math.Pow(10, p1);
-                    termitem.Power = p2;
-                    Terms.Add(termitem);
-                }
-                else if (coeffs[1].Contains("x"))
-                {
-                    var epxs = coeffs[1].Split(new string[] { "x" }, StringSplitOptions.None);
-                    double p1 = Convert.ToDouble(epxs[0]);
-                    termitem = new Term();
-                    termitem.Coefficient = c * System.Math.Pow(10, p1);
-                    termitem.Power = 1;
-                    Terms.Add(termitem);
-                }
-                else
-                {
-                    double p = Convert.ToDouble(coeffs[1]);
-                    var termItem = new Term();
-                    termItem.Coefficient = c * System.Math.Pow(10, p);
-                    Terms.Add(termItem);
-                }
-            }
-            else
-            {
-                termitem = new Term(term);
-                Terms.Add(termitem);
-            }
+            var parser = new PolynomialParser();
+            this._Terms = parser.Parse(PolyExpression);
         }
 
         public Poly Integrate()
         {
-            var terms = new TermCollection();
-            foreach (Term t in this.Terms)
-            {
-                var pow = t.Power + 1;
-                var coeff = t.Coefficient / (t.Power + 1);
-                terms.Add(new Term(pow, coeff));
-            }
-            return new Poly(terms);
+            var integrationOp = new IntegrationOperation();
+            return integrationOp.Execute(this);
         }
 
         /// <summary>
@@ -684,15 +580,8 @@ namespace Polynomial
 
         public Poly Derivate()
         {
-            var terms = new TermCollection();
-            foreach (Term t in this.Terms)
-            {
-                var pow = t.Power - 1;
-                var coeff = t.Coefficient * t.Power;
-                terms.Add(new Term(pow, coeff));
-            }
-
-            return new Poly(terms);
+            var differentiationOp = new DifferentiationOperation();
+            return differentiationOp.Execute(this);
         }
 
         /// <summary>
@@ -820,7 +709,7 @@ namespace Polynomial
         public List<double> Roots()
         {
             //We are using this step which means we check sign change at interval of 1 centimeter along the beam
-            double step = 0.01;
+            double step = PolynomialConstants.RootFindingStep;
 
             Poly derivative = Derivate();
 
@@ -902,7 +791,7 @@ namespace Polynomial
 
             foreach (Term term in Terms)
             {
-                if (System.Math.Abs(term.Power - 1.0) > 0.000001 && System.Math.Abs(term.Power) > 0.000001)
+                if (System.Math.Abs(term.Power - 1.0) > PolynomialConstants.ComparisonTolerance && System.Math.Abs(term.Power) > PolynomialConstants.ComparisonTolerance)
                 {
                     return false;
                 }
@@ -922,7 +811,7 @@ namespace Polynomial
         {
             //initialize previous value
             double previous = (min + max) / 2;
-            double tolerance = 0.00001;
+            double tolerance = PolynomialConstants.RootTolerance;
             double root = Double.MaxValue;
             double calculate = Double.MaxValue;
 
