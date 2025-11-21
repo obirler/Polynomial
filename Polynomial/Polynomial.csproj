@@ -45,6 +45,7 @@
     <Compile Include="ConjugatePoly.cs" />
     <Compile Include="ConjugateTerm.cs" />
     <Compile Include="ConjugateTermCollectioncs.cs" />
+    <Compile Include="Factories\PolynomialFactory.cs" />
     <Compile Include="Interfaces\IPolynomial.cs" />
     <Compile Include="Interfaces\IPolynomialOperation.cs" />
     <Compile Include="Interfaces\IPolynomialParser.cs" />

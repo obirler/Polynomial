@@ -33,33 +33,38 @@ namespace Polynomial.Operations
         /// </summary>
         public List<double> Execute(IPolynomial polynomial)
         {
-            var poly = polynomial as Poly;
-            if (poly == null)
+            if (polynomial == null)
                 return null;
 
             double step = PolynomialConstants.RootFindingStep;
+            
+            // Get derivative - cast is necessary for Poly-specific operations
+            var poly = polynomial as Poly;
+            if (poly == null)
+                return null;
             var derivative = new DifferentiationOperation().Execute(poly);
+            
             var rootList = new List<double>();
             double previous = 0;
 
-            for (double i = poly.StartPoint; i <= poly.EndPoint; i += step)
+            for (double i = polynomial.StartPoint; i <= polynomial.EndPoint; i += step)
             {
                 double currentValue = i;
-                if (currentValue > poly.EndPoint)
+                if (currentValue > polynomial.EndPoint)
                 {
-                    currentValue = poly.EndPoint;
+                    currentValue = polynomial.EndPoint;
                 }
 
-                if (currentValue > poly.StartPoint)
+                if (currentValue > polynomial.StartPoint)
                 {
-                    double current = poly.Calculate(currentValue);
+                    double current = polynomial.Calculate(currentValue);
                     if (HasSignChange(previous, current))
                     {
-                        double root = FindRootInRange(poly, derivative, currentValue - step, currentValue);
+                        double root = FindRootInRange(polynomial, derivative, currentValue - step, currentValue);
                         rootList.Add(root);
                     }
                 }
-                previous = poly.Calculate(currentValue);
+                previous = polynomial.Calculate(currentValue);
             }
 
             return rootList.Count > 0 ? rootList : null;
@@ -76,7 +81,7 @@ namespace Polynomial.Operations
         /// <summary>
         /// Finds a root in the specified range using Newton's method.
         /// </summary>
-        private double FindRootInRange(Poly polynomial, Poly derivative, double min, double max)
+        private double FindRootInRange(IPolynomial polynomial, Poly derivative, double min, double max)
         {
             double previous = (min + max) / 2;
             double tolerance = PolynomialConstants.RootTolerance;
