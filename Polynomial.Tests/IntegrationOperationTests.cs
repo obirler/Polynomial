@@ -19,6 +19,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Polynomial;
 using Polynomial.Operations;
+using System;
 
 namespace Polynomial.Tests
 {
@@ -29,17 +30,28 @@ namespace Polynomial.Tests
         public void Execute_WithSimplePolynomial_ReturnsCorrectIntegral()
         {
             // Arrange
-            var poly = new Poly("x^2");
+            Console.WriteLine("TEST: Execute_WithSimplePolynomial_ReturnsCorrectIntegral");
+            Console.WriteLine("Testing: Integration operation on x^2");
+            string expression = "x^2";
+            Console.WriteLine($"Input polynomial: {expression}");
+            var poly = new Poly(expression);
             var operation = new IntegrationOperation();
 
             // Act
             var result = operation.Execute(poly);
+            Console.WriteLine($"Integrated polynomial: {result}");
 
             // Assert
             Assert.IsNotNull(result);
             // Integral of x^2 is (1/3)x^3
-            double value = result.Calculate(3);
-            Assert.AreEqual(9, value, 0.0001); // (1/3) * 27 = 9
+            double x = 3;
+            double value = result.Calculate(x);
+            double expected = 9; // (1/3) * 27 = 9
+            Console.WriteLine($"Expected integral: (1/3)x^3");
+            Console.WriteLine($"At x={x}: (1/3)*27 = {expected}");
+            Console.WriteLine($"Calculated: {value}");
+            Assert.AreEqual(expected, value, 0.0001);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]

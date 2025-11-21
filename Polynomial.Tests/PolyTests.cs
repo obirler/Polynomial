@@ -18,6 +18,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Polynomial;
+using System;
 
 namespace Polynomial.Tests
 {
@@ -28,114 +29,202 @@ namespace Polynomial.Tests
         public void Constructor_WithStringExpression_CreatesValidPolynomial()
         {
             // Arrange & Act
-            var poly = new Poly("3x^2 + 2x - 1");
+            Console.WriteLine("TEST: Constructor_WithStringExpression_CreatesValidPolynomial");
+            Console.WriteLine("Testing: Creating polynomial from string expression");
+            string expression = "3x^2 + 2x - 1";
+            Console.WriteLine($"Input expression: '{expression}'");
+            
+            var poly = new Poly(expression);
+            Console.WriteLine($"Polynomial created: {poly}");
 
             // Assert
+            Console.WriteLine($"Expected: Non-null polynomial with 3 terms");
+            Console.WriteLine($"Actual: Terms count = {poly.Terms.Count}");
             Assert.IsNotNull(poly);
             Assert.IsNotNull(poly.Terms);
             Assert.AreEqual(3, poly.Terms.Count);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
         public void Constructor_WithStartAndEndPoints_SetsRangeCorrectly()
         {
             // Arrange & Act
-            var poly = new Poly("x^2", 0, 10);
+            Console.WriteLine("TEST: Constructor_WithStartAndEndPoints_SetsRangeCorrectly");
+            Console.WriteLine("Testing: Creating polynomial with defined range");
+            string expression = "x^2";
+            double startPoint = 0;
+            double endPoint = 10;
+            Console.WriteLine($"Input: expression='{expression}', startPoint={startPoint}, endPoint={endPoint}");
+            
+            var poly = new Poly(expression, startPoint, endPoint);
 
             // Assert
+            Console.WriteLine($"Expected: StartPoint={startPoint}, EndPoint={endPoint}");
+            Console.WriteLine($"Actual: StartPoint={poly.StartPoint}, EndPoint={poly.EndPoint}");
             Assert.AreEqual(0, poly.StartPoint);
             Assert.AreEqual(10, poly.EndPoint);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
         public void Calculate_WithSimplePolynomial_ReturnsCorrectValue()
         {
             // Arrange
-            var poly = new Poly("x^2 + 2x + 1");
+            Console.WriteLine("TEST: Calculate_WithSimplePolynomial_ReturnsCorrectValue");
+            Console.WriteLine("Testing: Calculating polynomial value at x=3");
+            string expression = "x^2 + 2x + 1";
+            Console.WriteLine($"Polynomial: {expression}");
+            var poly = new Poly(expression);
 
             // Act
-            double result = poly.Calculate(3);
+            double x = 3;
+            double result = poly.Calculate(x);
 
             // Assert
             // 3^2 + 2*3 + 1 = 9 + 6 + 1 = 16
-            Assert.AreEqual(16, result, 0.0001);
+            double expected = 16;
+            Console.WriteLine($"Calculation at x={x}: 3^2 + 2*3 + 1 = 9 + 6 + 1");
+            Console.WriteLine($"Expected: {expected}");
+            Console.WriteLine($"Actual: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
         public void Calculate_WithNegativeCoefficients_ReturnsCorrectValue()
         {
             // Arrange
-            var poly = new Poly("2x^2 - 3x + 1");
+            Console.WriteLine("TEST: Calculate_WithNegativeCoefficients_ReturnsCorrectValue");
+            Console.WriteLine("Testing: Calculating polynomial with negative coefficients");
+            string expression = "2x^2 - 3x + 1";
+            Console.WriteLine($"Polynomial: {expression}");
+            var poly = new Poly(expression);
 
             // Act
-            double result = poly.Calculate(2);
+            double x = 2;
+            double result = poly.Calculate(x);
 
             // Assert
             // 2*4 - 3*2 + 1 = 8 - 6 + 1 = 3
-            Assert.AreEqual(3, result, 0.0001);
+            double expected = 3;
+            Console.WriteLine($"Calculation at x={x}: 2*4 - 3*2 + 1 = 8 - 6 + 1");
+            Console.WriteLine($"Expected: {expected}");
+            Console.WriteLine($"Actual: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
         public void Integrate_SimplePolynomial_ReturnsCorrectIntegral()
         {
             // Arrange
-            var poly = new Poly("x^2");
+            Console.WriteLine("TEST: Integrate_SimplePolynomial_ReturnsCorrectIntegral");
+            Console.WriteLine("Testing: Integration of x^2");
+            string expression = "x^2";
+            Console.WriteLine($"Original polynomial: {expression}");
+            var poly = new Poly(expression);
 
             // Act
             var integrated = poly.Integrate();
+            Console.WriteLine($"Integrated polynomial: {integrated}");
 
             // Assert
             // Integral of x^2 is (1/3)x^3
             Assert.IsNotNull(integrated);
-            var result = integrated.Calculate(3);
+            double x = 3;
+            var result = integrated.Calculate(x);
             // (1/3) * 27 = 9
-            Assert.AreEqual(9, result, 0.0001);
+            double expected = 9;
+            Console.WriteLine($"Expected integral of x^2: (1/3)x^3");
+            Console.WriteLine($"At x={x}: (1/3)*27 = {expected}");
+            Console.WriteLine($"Calculated: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
         public void Derivate_SimplePolynomial_ReturnsCorrectDerivative()
         {
             // Arrange
-            var poly = new Poly("x^3 + 2x^2 + 3x");
+            Console.WriteLine("TEST: Derivate_SimplePolynomial_ReturnsCorrectDerivative");
+            Console.WriteLine("Testing: Differentiation of x^3 + 2x^2 + 3x");
+            string expression = "x^3 + 2x^2 + 3x";
+            Console.WriteLine($"Original polynomial: {expression}");
+            var poly = new Poly(expression);
 
             // Act
             var derivative = poly.Derivate();
+            Console.WriteLine($"Derivative polynomial: {derivative}");
 
             // Assert
             // Derivative of x^3 + 2x^2 + 3x is 3x^2 + 4x + 3
-            var result = derivative.Calculate(2);
+            double x = 2;
+            var result = derivative.Calculate(x);
             // 3*4 + 4*2 + 3 = 12 + 8 + 3 = 23
-            Assert.AreEqual(23, result, 0.0001);
+            double expected = 23;
+            Console.WriteLine($"Expected derivative: 3x^2 + 4x + 3");
+            Console.WriteLine($"At x={x}: 3*4 + 4*2 + 3 = 12 + 8 + 3 = {expected}");
+            Console.WriteLine($"Calculated: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
         public void DefiniteIntegral_WithRange_ReturnsCorrectValue()
         {
             // Arrange
-            var poly = new Poly("x");
+            Console.WriteLine("TEST: DefiniteIntegral_WithRange_ReturnsCorrectValue");
+            Console.WriteLine("Testing: Definite integral of x from 0 to 2");
+            string expression = "x";
+            Console.WriteLine($"Polynomial: {expression}");
+            var poly = new Poly(expression);
 
             // Act
-            double result = poly.DefiniteIntegral(0, 2);
+            double start = 0, end = 2;
+            double result = poly.DefiniteIntegral(start, end);
 
             // Assert
             // Integral of x from 0 to 2 is (1/2)*x^2 = (1/2)*4 - 0 = 2
-            Assert.AreEqual(2, result, 0.0001);
+            double expected = 2;
+            Console.WriteLine($"Definite integral from {start} to {end}");
+            Console.WriteLine($"Formula: ∫x dx = (1/2)x^2");
+            Console.WriteLine($"Calculation: [(1/2)*{end}^2] - [(1/2)*{start}^2] = {expected}");
+            Console.WriteLine($"Expected: {expected}");
+            Console.WriteLine($"Actual: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
         public void Addition_TwoPolynomials_ReturnsCorrectSum()
         {
             // Arrange
-            var poly1 = new Poly("x^2 + 2x");
-            var poly2 = new Poly("3x^2 - x + 1");
+            Console.WriteLine("TEST: Addition_TwoPolynomials_ReturnsCorrectSum");
+            Console.WriteLine("Testing: Adding two polynomials");
+            string expr1 = "x^2 + 2x";
+            string expr2 = "3x^2 - x + 1";
+            Console.WriteLine($"Polynomial 1: {expr1}");
+            Console.WriteLine($"Polynomial 2: {expr2}");
+            var poly1 = new Poly(expr1);
+            var poly2 = new Poly(expr2);
 
             // Act
             var sum = poly1 + poly2;
+            Console.WriteLine($"Sum: {sum}");
 
             // Assert
-            var result = sum.Calculate(2);
+            double x = 2;
+            var result = sum.Calculate(x);
             // (4 + 4) + (12 - 2 + 1) = 8 + 11 = 19
-            Assert.AreEqual(19, result, 0.0001);
+            double expected = 19;
+            Console.WriteLine($"At x={x}:");
+            Console.WriteLine($"  Poly1: {x}^2 + 2*{x} = 4 + 4 = 8");
+            Console.WriteLine($"  Poly2: 3*{x}^2 - {x} + 1 = 12 - 2 + 1 = 11");
+            Console.WriteLine($"  Sum: 8 + 11 = {expected}");
+            Console.WriteLine($"Calculated: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
@@ -158,16 +247,29 @@ namespace Polynomial.Tests
         public void Multiplication_TwoPolynomials_ReturnsCorrectProduct()
         {
             // Arrange
-            var poly1 = new Poly("x + 1");
-            var poly2 = new Poly("x - 1");
+            Console.WriteLine("TEST: Multiplication_TwoPolynomials_ReturnsCorrectProduct");
+            Console.WriteLine("Testing: Multiplying (x+1) * (x-1)");
+            string expr1 = "x + 1";
+            string expr2 = "x - 1";
+            Console.WriteLine($"Polynomial 1: {expr1}");
+            Console.WriteLine($"Polynomial 2: {expr2}");
+            var poly1 = new Poly(expr1);
+            var poly2 = new Poly(expr2);
 
             // Act
             var product = poly1 * poly2;
+            Console.WriteLine($"Product: {product}");
 
             // Assert
-            var result = product.Calculate(3);
+            double x = 3;
+            var result = product.Calculate(x);
             // (x+1)(x-1) = x^2 - 1, at x=3: 9 - 1 = 8
-            Assert.AreEqual(8, result, 0.0001);
+            double expected = 8;
+            Console.WriteLine($"Expected formula: (x+1)(x-1) = x^2 - 1");
+            Console.WriteLine($"At x={x}: {x}^2 - 1 = 9 - 1 = {expected}");
+            Console.WriteLine($"Calculated: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]

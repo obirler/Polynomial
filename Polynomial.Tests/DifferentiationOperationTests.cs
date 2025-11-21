@@ -19,6 +19,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Polynomial;
 using Polynomial.Operations;
+using System;
 
 namespace Polynomial.Tests
 {
@@ -29,17 +30,28 @@ namespace Polynomial.Tests
         public void Execute_WithQuadraticPolynomial_ReturnsCorrectDerivative()
         {
             // Arrange
-            var poly = new Poly("x^2");
+            Console.WriteLine("TEST: Execute_WithQuadraticPolynomial_ReturnsCorrectDerivative");
+            Console.WriteLine("Testing: Differentiation operation on x^2");
+            string expression = "x^2";
+            Console.WriteLine($"Input polynomial: {expression}");
+            var poly = new Poly(expression);
             var operation = new DifferentiationOperation();
 
             // Act
             var result = operation.Execute(poly);
+            Console.WriteLine($"Derivative polynomial: {result}");
 
             // Assert
             Assert.IsNotNull(result);
             // Derivative of x^2 is 2x
-            double value = result.Calculate(3);
-            Assert.AreEqual(6, value, 0.0001);
+            double x = 3;
+            double value = result.Calculate(x);
+            double expected = 6; // 2*3 = 6
+            Console.WriteLine($"Expected derivative: 2x");
+            Console.WriteLine($"At x={x}: 2*{x} = {expected}");
+            Console.WriteLine($"Calculated: {value}");
+            Assert.AreEqual(expected, value, 0.0001);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]

@@ -37,10 +37,18 @@ namespace Polynomial.Tests
         public void Validate_WithValidExpression_ReturnsTrue()
         {
             // Act
-            bool result = _parser.Validate("3x^2 + 2x - 1");
+            Console.WriteLine("TEST: Validate_WithValidExpression_ReturnsTrue");
+            Console.WriteLine("Testing: Validating polynomial expression");
+            string expression = "3x^2 + 2x - 1";
+            Console.WriteLine($"Input expression: '{expression}'");
+            
+            bool result = _parser.Validate(expression);
 
             // Assert
+            Console.WriteLine($"Expected: true (valid expression)");
+            Console.WriteLine($"Actual: {result}");
             Assert.IsTrue(result);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
@@ -67,11 +75,24 @@ namespace Polynomial.Tests
         public void Parse_WithSimpleExpression_ReturnsCorrectTerms()
         {
             // Act
-            var terms = _parser.Parse("x^2 + 2x + 1");
+            Console.WriteLine("TEST: Parse_WithSimpleExpression_ReturnsCorrectTerms");
+            Console.WriteLine("Testing: Parsing polynomial expression into terms");
+            string expression = "x^2 + 2x + 1";
+            Console.WriteLine($"Input expression: '{expression}'");
+            
+            var terms = _parser.Parse(expression);
 
             // Assert
+            int expectedCount = 3;
+            Console.WriteLine($"Expected: {expectedCount} terms");
+            Console.WriteLine($"Actual: {terms.Count} terms");
+            for (int i = 0; i < terms.Count; i++)
+            {
+                Console.WriteLine($"  Term {i+1}: Power={terms[i].Power}, Coefficient={terms[i].Coefficient}");
+            }
             Assert.IsNotNull(terms);
-            Assert.AreEqual(3, terms.Count);
+            Assert.AreEqual(expectedCount, terms.Count);
+            Console.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
