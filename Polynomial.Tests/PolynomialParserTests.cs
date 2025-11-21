@@ -111,11 +111,26 @@ namespace Polynomial.Tests
         public void Parse_WithScientificNotation_ParsesCorrectly()
         {
             // Act
-            var terms = _parser.Parse("1E2x^2");
+            Debug.WriteLine("TEST: Parse_WithScientificNotation_ParsesCorrectly");
+            Debug.WriteLine("Testing: Parser handling of scientific notation");
+            string expression = "1E2x^2";
+            Debug.WriteLine($"Input expression: '{expression}'");
+            
+            var terms = _parser.Parse(expression);
 
             // Assert
+            Debug.WriteLine($"Expected: Non-null terms collection with at least 1 term");
+            Debug.WriteLine($"Actual: {terms.Count} term(s) parsed");
+            for (int i = 0; i < terms.Count; i++)
+            {
+                Debug.WriteLine($"  Term {i+1}: Coefficient={terms[i].Coefficient}, Power={terms[i].Power}");
+            }
             Assert.IsNotNull(terms);
             Assert.IsTrue(terms.Count > 0);
+            // Verify the coefficient is parsed correctly as 100
+            Assert.AreEqual(100, terms[0].Coefficient, 0.0001);
+            Assert.AreEqual(2, terms[0].Power);
+            Debug.WriteLine("✓ Test passed - Scientific notation 1E2 correctly parsed as 100");
         }
 
         [TestMethod]

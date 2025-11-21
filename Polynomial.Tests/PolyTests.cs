@@ -417,6 +417,162 @@ namespace Polynomial.Tests
         }
 
         [TestMethod]
+        public void ScientificNotation_WithPositiveExponent_ParsesCorrectly()
+        {
+            // Arrange
+            Debug.WriteLine("TEST: ScientificNotation_WithPositiveExponent_ParsesCorrectly");
+            Debug.WriteLine("Testing: Parsing polynomial with scientific notation 1E2x^2");
+            string expression = "1E2x^2";
+            Debug.WriteLine($"Input expression: '{expression}'");
+            
+            // Act
+            var poly = new Poly(expression);
+            Debug.WriteLine($"Parsed polynomial: {poly}");
+            
+            // Assert
+            double x = 2;
+            var result = poly.Calculate(x);
+            double expected = 400; // 1E2 = 100, 100 * 2^2 = 400
+            Debug.WriteLine($"Calculation: 100 * {x}^2 = 100 * 4 = {expected}");
+            Debug.WriteLine($"Expected: {expected}");
+            Debug.WriteLine($"Actual: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Debug.WriteLine("✓ Test passed");
+        }
+
+        [TestMethod]
+        public void ScientificNotation_WithNegativeExponent_ParsesCorrectly()
+        {
+            // Arrange
+            Debug.WriteLine("TEST: ScientificNotation_WithNegativeExponent_ParsesCorrectly");
+            Debug.WriteLine("Testing: Parsing polynomial with negative scientific notation 1E-2x^2");
+            string expression = "1E-2x^2";
+            Debug.WriteLine($"Input expression: '{expression}'");
+            
+            // Act
+            var poly = new Poly(expression);
+            Debug.WriteLine($"Parsed polynomial: {poly}");
+            
+            // Assert
+            double x = 2;
+            var result = poly.Calculate(x);
+            double expected = 0.04; // 1E-2 = 0.01, 0.01 * 2^2 = 0.04
+            Debug.WriteLine($"Calculation: 0.01 * {x}^2 = 0.01 * 4 = {expected}");
+            Debug.WriteLine($"Expected: {expected}");
+            Debug.WriteLine($"Actual: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Debug.WriteLine("✓ Test passed");
+        }
+
+        [TestMethod]
+        public void ScientificNotation_MultipleTerms_ParsesCorrectly()
+        {
+            // Arrange
+            Debug.WriteLine("TEST: ScientificNotation_MultipleTerms_ParsesCorrectly");
+            Debug.WriteLine("Testing: Creating multiple polynomials with scientific notation and adding them");
+            string expr1 = "1E2x^2";
+            string expr2 = "1E1x";
+            Debug.WriteLine($"Polynomial 1: '{expr1}'");
+            Debug.WriteLine($"Polynomial 2: '{expr2}'");
+            
+            // Act
+            var poly1 = new Poly(expr1);
+            var poly2 = new Poly(expr2);
+            var combined = poly1 + poly2;
+            Debug.WriteLine($"Combined polynomial: {combined}");
+            
+            // Assert
+            double x = 2;
+            var result = combined.Calculate(x);
+            // 1E2 * 4 + 1E1 * 2 = 100*4 + 10*2 = 400 + 20 = 420
+            double expected = 420;
+            Debug.WriteLine($"Calculation at x={x}:");
+            Debug.WriteLine($"  100*{x}^2 + 10*{x} = 400 + 20 = {expected}");
+            Debug.WriteLine($"Expected: {expected}");
+            Debug.WriteLine($"Actual: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Debug.WriteLine("✓ Test passed");
+        }
+
+        [TestMethod]
+        public void ScientificNotation_MixedWithRegular_ParsesCorrectly()
+        {
+            // Arrange
+            Debug.WriteLine("TEST: ScientificNotation_MixedWithRegular_ParsesCorrectly");
+            Debug.WriteLine("Testing: Adding scientific notation polynomial with regular polynomial");
+            string expr1 = "1E2x^2";
+            string expr2 = "5x + 3";
+            Debug.WriteLine($"Scientific notation polynomial: '{expr1}'");
+            Debug.WriteLine($"Regular polynomial: '{expr2}'");
+            
+            // Act
+            var poly1 = new Poly(expr1);
+            var poly2 = new Poly(expr2);
+            var combined = poly1 + poly2;
+            Debug.WriteLine($"Combined polynomial: {combined}");
+            
+            // Assert
+            double x = 2;
+            var result = combined.Calculate(x);
+            // 100 * 4 + 5 * 2 + 3 = 400 + 10 + 3 = 413
+            double expected = 413;
+            Debug.WriteLine($"Calculation at x={x}:");
+            Debug.WriteLine($"  100*{x}^2 + 5*{x} + 3 = 400 + 10 + 3 = {expected}");
+            Debug.WriteLine($"Expected: {expected}");
+            Debug.WriteLine($"Actual: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Debug.WriteLine("✓ Test passed");
+        }
+
+        [TestMethod]
+        public void ScientificNotation_LargeExponent_HandlesCorrectly()
+        {
+            // Arrange
+            Debug.WriteLine("TEST: ScientificNotation_LargeExponent_HandlesCorrectly");
+            Debug.WriteLine("Testing: Large scientific notation exponent 1E6x");
+            string expression = "1E6x";
+            Debug.WriteLine($"Input expression: '{expression}'");
+            
+            // Act
+            var poly = new Poly(expression);
+            Debug.WriteLine($"Parsed polynomial: {poly}");
+            
+            // Assert
+            double x = 2;
+            var result = poly.Calculate(x);
+            double expected = 2000000; // 1E6 * 2 = 2,000,000
+            Debug.WriteLine($"Calculation: 1,000,000 * {x} = {expected}");
+            Debug.WriteLine($"Expected: {expected}");
+            Debug.WriteLine($"Actual: {result}");
+            Assert.AreEqual(expected, result, 0.01);
+            Debug.WriteLine("✓ Test passed");
+        }
+
+        [TestMethod]
+        public void ScientificNotation_InConstantTerm_ParsesCorrectly()
+        {
+            // Arrange
+            Debug.WriteLine("TEST: ScientificNotation_InConstantTerm_ParsesCorrectly");
+            Debug.WriteLine("Testing: Scientific notation in constant term");
+            string expression = "x^2 + 1E3";
+            Debug.WriteLine($"Input expression: '{expression}'");
+            
+            // Act
+            var poly = new Poly(expression);
+            Debug.WriteLine($"Parsed polynomial: {poly}");
+            
+            // Assert
+            double x = 2;
+            var result = poly.Calculate(x);
+            double expected = 1004; // 2^2 + 1000 = 4 + 1000 = 1004
+            Debug.WriteLine($"Calculation: {x}^2 + 1000 = 4 + 1000 = {expected}");
+            Debug.WriteLine($"Expected: {expected}");
+            Debug.WriteLine($"Actual: {result}");
+            Assert.AreEqual(expected, result, 0.0001);
+            Debug.WriteLine("✓ Test passed");
+        }
+
+        [TestMethod]
         public void Parse_UpdatesPolynomialWithNewExpression()
         {
             // Arrange
