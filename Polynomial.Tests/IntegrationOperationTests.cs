@@ -19,7 +19,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Polynomial;
 using Polynomial.Operations;
-using System;
+using System.Diagnostics;
 
 namespace Polynomial.Tests
 {
@@ -30,16 +30,16 @@ namespace Polynomial.Tests
         public void Execute_WithSimplePolynomial_ReturnsCorrectIntegral()
         {
             // Arrange
-            Console.WriteLine("TEST: Execute_WithSimplePolynomial_ReturnsCorrectIntegral");
-            Console.WriteLine("Testing: Integration operation on x^2");
+            Debug.WriteLine("TEST: Execute_WithSimplePolynomial_ReturnsCorrectIntegral");
+            Debug.WriteLine("Testing: Integration operation on x^2");
             string expression = "x^2";
-            Console.WriteLine($"Input polynomial: {expression}");
+            Debug.WriteLine($"Input polynomial: {expression}");
             var poly = new Poly(expression);
             var operation = new IntegrationOperation();
 
             // Act
             var result = operation.Execute(poly);
-            Console.WriteLine($"Integrated polynomial: {result}");
+            Debug.WriteLine($"Integrated polynomial: {result}");
 
             // Assert
             Assert.IsNotNull(result);
@@ -47,11 +47,11 @@ namespace Polynomial.Tests
             double x = 3;
             double value = result.Calculate(x);
             double expected = 9; // (1/3) * 27 = 9
-            Console.WriteLine($"Expected integral: (1/3)x^3");
-            Console.WriteLine($"At x={x}: (1/3)*27 = {expected}");
-            Console.WriteLine($"Calculated: {value}");
+            Debug.WriteLine($"Expected integral: (1/3)x^3");
+            Debug.WriteLine($"At x={x}: (1/3)*27 = {expected}");
+            Debug.WriteLine($"Calculated: {value}");
             Assert.AreEqual(expected, value, 0.0001);
-            Console.WriteLine("✓ Test passed");
+            Debug.WriteLine("✓ Test passed");
         }
 
         [TestMethod]

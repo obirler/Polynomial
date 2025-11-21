@@ -18,7 +18,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Polynomial;
-using System;
+using System.Diagnostics;
 
 namespace Polynomial.Tests
 {
@@ -29,41 +29,41 @@ namespace Polynomial.Tests
         public void Constructor_WithPowerAndCoefficient_CreatesValidTerm()
         {
             // Arrange & Act
-            Console.WriteLine("TEST: Constructor_WithPowerAndCoefficient_CreatesValidTerm");
-            Console.WriteLine("Testing: Creating term with power=2, coefficient=3.5");
+            Debug.WriteLine("TEST: Constructor_WithPowerAndCoefficient_CreatesValidTerm");
+            Debug.WriteLine("Testing: Creating term with power=2, coefficient=3.5");
             double power = 2;
             double coefficient = 3.5;
-            Console.WriteLine($"Input: power={power}, coefficient={coefficient}");
+            Debug.WriteLine($"Input: power={power}, coefficient={coefficient}");
             
             var term = new Term(power, coefficient);
 
             // Assert
-            Console.WriteLine($"Expected: Power={power}, Coefficient={coefficient}");
-            Console.WriteLine($"Actual: Power={term.Power}, Coefficient={term.Coefficient}");
+            Debug.WriteLine($"Expected: Power={power}, Coefficient={coefficient}");
+            Debug.WriteLine($"Actual: Power={term.Power}, Coefficient={term.Coefficient}");
             Assert.AreEqual(2, term.Power);
             Assert.AreEqual(3.5, term.Coefficient);
-            Console.WriteLine("✓ Test passed");
+            Debug.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
         public void Constructor_WithStringExpression_ParsesSimpleTerm()
         {
             // Arrange & Act
-            Console.WriteLine("TEST: Constructor_WithStringExpression_ParsesSimpleTerm");
-            Console.WriteLine("Testing: Parsing term from string '3x^2'");
+            Debug.WriteLine("TEST: Constructor_WithStringExpression_ParsesSimpleTerm");
+            Debug.WriteLine("Testing: Parsing term from string '3x^2'");
             string expression = "3x^2";
-            Console.WriteLine($"Input expression: '{expression}'");
+            Debug.WriteLine($"Input expression: '{expression}'");
             
             var term = new Term(expression);
 
             // Assert
             double expectedPower = 2;
             double expectedCoeff = 3;
-            Console.WriteLine($"Expected: Power={expectedPower}, Coefficient={expectedCoeff}");
-            Console.WriteLine($"Actual: Power={term.Power}, Coefficient={term.Coefficient}");
+            Debug.WriteLine($"Expected: Power={expectedPower}, Coefficient={expectedCoeff}");
+            Debug.WriteLine($"Actual: Power={term.Power}, Coefficient={term.Coefficient}");
             Assert.AreEqual(expectedPower, term.Power);
             Assert.AreEqual(expectedCoeff, term.Coefficient);
-            Console.WriteLine("✓ Test passed");
+            Debug.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
@@ -92,21 +92,21 @@ namespace Polynomial.Tests
         public void Constructor_WithNegativeCoefficient_ParsesCorrectly()
         {
             // Arrange & Act
-            Console.WriteLine("TEST: Constructor_WithNegativeCoefficient_ParsesCorrectly");
-            Console.WriteLine("Testing: Parsing term with negative coefficient '-4x^3'");
+            Debug.WriteLine("TEST: Constructor_WithNegativeCoefficient_ParsesCorrectly");
+            Debug.WriteLine("Testing: Parsing term with negative coefficient '-4x^3'");
             string expression = "-4x^3";
-            Console.WriteLine($"Input expression: '{expression}'");
+            Debug.WriteLine($"Input expression: '{expression}'");
             
             var term = new Term(expression);
 
             // Assert
             double expectedPower = 3;
             double expectedCoeff = -4;
-            Console.WriteLine($"Expected: Power={expectedPower}, Coefficient={expectedCoeff}");
-            Console.WriteLine($"Actual: Power={term.Power}, Coefficient={term.Coefficient}");
+            Debug.WriteLine($"Expected: Power={expectedPower}, Coefficient={expectedCoeff}");
+            Debug.WriteLine($"Actual: Power={term.Power}, Coefficient={term.Coefficient}");
             Assert.AreEqual(expectedPower, term.Power);
             Assert.AreEqual(expectedCoeff, term.Coefficient);
-            Console.WriteLine("✓ Test passed");
+            Debug.WriteLine("✓ Test passed");
         }
 
         [TestMethod]

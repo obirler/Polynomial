@@ -19,7 +19,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Polynomial;
 using Polynomial.Factories;
-using System;
+using System.Diagnostics;
 
 namespace Polynomial.Tests
 {
@@ -30,25 +30,25 @@ namespace Polynomial.Tests
         public void Create_WithExpression_CreatesValidPolynomial()
         {
             // Arrange
-            Console.WriteLine("TEST: Create_WithExpression_CreatesValidPolynomial");
-            Console.WriteLine("Testing: Creating polynomial using factory");
+            Debug.WriteLine("TEST: Create_WithExpression_CreatesValidPolynomial");
+            Debug.WriteLine("Testing: Creating polynomial using factory");
             string expression = "x^2 + 1";
-            Console.WriteLine($"Input expression: '{expression}'");
+            Debug.WriteLine($"Input expression: '{expression}'");
             var factory = new PolynomialFactory();
 
             // Act
             var poly = factory.Create(expression);
-            Console.WriteLine($"Created polynomial: {poly}");
+            Debug.WriteLine($"Created polynomial: {poly}");
 
             // Assert
             Assert.IsNotNull(poly);
             double x = 2;
             double result = poly.Calculate(x);
             double expected = 5; // 2^2 + 1 = 5
-            Console.WriteLine($"At x={x}: {x}^2 + 1 = {expected}");
-            Console.WriteLine($"Calculated: {result}");
+            Debug.WriteLine($"At x={x}: {x}^2 + 1 = {expected}");
+            Debug.WriteLine($"Calculated: {result}");
             Assert.AreEqual(expected, result, 0.0001);
-            Console.WriteLine("✓ Test passed");
+            Debug.WriteLine("✓ Test passed");
         }
 
         [TestMethod]
