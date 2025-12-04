@@ -2,7 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.8-512BD4)]()
-[![C#](https://img.shields.io/badge/C%23-9.0-239120)]()
+[![C#](https://img.shields.io/badge/C%23-7.3-239120)]()
 
 A comprehensive C# library for advanced operations with polynomial expressions. This project is based on Morteza Alikhani's [Polynomial.Net](https://www.codeproject.com/Articles/83394/Polynomial-Net) project and has been significantly enhanced with modern design patterns, SOLID principles, and extensive functionality.
 
@@ -88,7 +88,7 @@ Polynomial/
 │   │   ├── PiecewisePoly.cs            # Piecewise polynomial support
 │   │   ├── ConjugatePoly.cs            # Complex conjugate polynomials
 │   │   ├── ConjugateTerm.cs            # Complex conjugate terms
-│   │   ├── ConjugateTermCollectioncs.cs # Collection of conjugate terms
+│   │   ├── ConjugateTermCollection.cs  # Collection of conjugate terms
 │   │   ├── PiecewiseConjugatePoly.cs   # Piecewise conjugate polynomials
 │   │   └── Algebra.cs                  # Algebraic utility functions
 │   │
@@ -254,7 +254,7 @@ flowchart TD
 
 - .NET Framework 4.8 or higher
 - Visual Studio 2019 or later (recommended)
-- C# 7.0 or higher
+- C# 7.0 to 7.3 (compatible with .NET Framework 4.8)
 
 ### Installation
 
